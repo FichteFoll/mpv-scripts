@@ -1,3 +1,10 @@
+-- pitchcontrol.lua
+-- Version: 0.1.1
+--
+-- Author: FichteFoll
+-- URL: https://github.com/FichteFoll/mpv-scripts
+-- License: MIT
+
 local utils = require 'mp.utils'
 local msg = require('mp.msg')
 local options = require('mp.options')
