@@ -1,9 +1,18 @@
 -- pitchcontrol.lua
--- Version: 0.1.1
+-- Version: 0.2.0
 --
 -- Author: FichteFoll
 -- URL: https://github.com/FichteFoll/mpv-scripts
 -- License: MIT
+
+-- script-message-to pitchcontrol increase
+--   Increase pitch by one half-tone. Bound to Alt+R.
+-- script-message-to pitchcontrol decrease
+--   Increase pitch by one half-tone. Bound to Alt+r.
+-- script-message-to pitchcontrol toggle
+--   Toggle pitching.
+-- script-message-to pitchcontrol set_halftone_pitch <number>
+--   Sets pitch to <number> half-tones - positive, negative or 0.
 
 local utils = require 'mp.utils'
 local msg = require('mp.msg')
@@ -18,11 +27,15 @@ local active = false
 
 
 function set_halftone_pitch(pitch, activate)
+    if activate == nil then
+        activate = true
+    end
+    pitch = tonumber(pitch)
     local pitch_scale = math.pow(HALFTONE_SCALE, pitch)
 
     if active then
         mp.commandv('af-command', RUBBERBAND_LABEL, 'set-pitch', pitch_scale)
-    elseif activate or current_pitch == 0 then
+    elseif activate then
         mp.command(("af add @%s:rubberband=pitch-scale=%s"):format(RUBBERBAND_LABEL, pitch_scale))
         active = true
     else
@@ -39,12 +52,12 @@ end
 
 
 function increase_handler()
-    set_halftone_pitch(current_pitch + 1)
+    set_halftone_pitch(current_pitch + 1, false)
 end
 
 
 function decrease_handler()
-    set_halftone_pitch(current_pitch - 1)
+    set_halftone_pitch(current_pitch - 1, false)
 end
 
 
@@ -62,3 +75,4 @@ end
 mp.add_key_binding("Alt+p", 'increase', decrease_handler)
 mp.add_key_binding("Alt+P", 'decrease', increase_handler)
 mp.register_script_message('toggle', toggle_handler)
+mp.register_script_message('set_halftone_pitch', set_halftone_pitch)
