@@ -1,9 +1,9 @@
 local utils = require 'mp.utils'
 local msg = require('mp.msg')
 local options = require('mp.options')
-local script_name = 'pitchcontrol'
+local script_name = mp.get_script_name() -- "pitchcontrol"
 
-local HALFTONE_SCALE = 1.059463094352953
+local HALFTONE_SCALE = math.pow(2, 1.0/12) -- 1.059463094352953
 local RUBBERBAND_LABEL = string.format("%s-rubberband", script_name)
 
 local current_pitch = 0
@@ -11,12 +11,12 @@ local active = false
 
 
 function set_halftone_pitch(pitch, activate)
-    local pitch_scale = 1.0 * math.pow(HALFTONE_SCALE, pitch)
+    local pitch_scale = math.pow(HALFTONE_SCALE, pitch)
 
     if active then
         mp.commandv('af-command', RUBBERBAND_LABEL, 'set-pitch', pitch_scale)
     elseif activate or current_pitch == 0 then
-        mp.command(('af add @%s:rubberband=pitch-scale=%s'):format(RUBBERBAND_LABEL, pitch_scale))
+        mp.command(("af add @%s:rubberband=pitch-scale=%s"):format(RUBBERBAND_LABEL, pitch_scale))
         active = true
     else
         mp.osd_message(("'%s' is inactive"):format(script_name))
@@ -43,7 +43,7 @@ end
 
 function toggle_handler()
     if active then
-        mp.command(('af del @%s'):format(RUBBERBAND_LABEL))
+        mp.command(("af del @%s"):format(RUBBERBAND_LABEL))
         mp.osd_message(("'%s' deactivated"):format(script_name))
         active = false
     else
@@ -52,6 +52,6 @@ function toggle_handler()
 end
 
 
-mp.add_key_binding("Alt+p", "increase", decrease_handler)
-mp.add_key_binding("Alt+P", "decrease", increase_handler)
-mp.add_key_binding("Alt+l", "toggle", toggle_handler)
+mp.add_key_binding("Alt+p", 'increase', decrease_handler)
+mp.add_key_binding("Alt+P", 'decrease', increase_handler)
+mp.register_script_message('toggle', toggle_handler)
