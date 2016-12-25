@@ -12,4 +12,3 @@ Control audio pitch in half-tone steps.
 <kbd>Alt+P</kbd> increases,
 <kbd>Alt+p</kbd> decreases 
 by one half-tone each.
-<kbd>Alt+l</kbd> toggles.
