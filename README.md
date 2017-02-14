@@ -19,7 +19,7 @@ selected video/audio/subtitle track,
 audio or subtitle delay).
 
 Create a start mark with <kbd>Alt+i</kbd>,
-and end mark with <kbd>Alt+o</kbd>
+an end mark with <kbd>Alt+o</kbd>
 and start the encode with <kbd>Alt+x</kbd>.
 
 
