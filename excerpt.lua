@@ -1,6 +1,6 @@
 -- excerpt.lua - Create excerpts of videos in mpv.
 --
--- Version: 0.1.1
+-- Version: 0.1.2
 -- URL: https://github.com/FichteFoll/mpv-scripts
 -- License: GPLv2
 --
@@ -193,7 +193,7 @@ function excerpt_write_handler()
 
     local profile = nil
     if o.profile == "auto" then
-        profile = "enc-to-"..o.container
+        profile = "conv-to-"..o.container
     elseif o.profile ~= "" then
         profile = o.profile
     end
