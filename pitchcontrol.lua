@@ -7,16 +7,17 @@
 -- Commands for key bindings:
 --
 -- * script-message-to pitchcontrol increase
---     Increase pitch by one half-tone. Bound to Alt+R.
+--     Increase pitch by one semitone. Bound to Alt+p.
 -- * script-message-to pitchcontrol decrease
---     Increase pitch by one half-tone. Bound to Alt+r.
+--     Increase pitch by one semitone. Bound to Alt+P.
 -- * script-message-to pitchcontrol toggle
 --     Toggle pitching.
--- * script-message-to pitchcontrol set_halftone_pitch <number>
---     Sets pitch to <number> half-tones - positive, negative or 0.
+-- * script-message-to pitchcontrol set_semitone_pitch <number>
+--     Sets pitch to <number> semitones relative to the original
+--     (positive, negative or 0).
 
 
--- Copyright 2016-2017 FichteFoll
+-- Copyright 2016-2024 FichteFoll
 --
 -- Permission to use, copy, modify, and/or distribute this software for any
 -- purpose with or without fee is hereby granted, provided that the above
@@ -36,19 +37,18 @@ local msg = require('mp.msg')
 local options = require('mp.options')
 local script_name = mp.get_script_name() -- "pitchcontrol"
 
-local HALFTONE_SCALE = math.pow(2, 1.0/12) -- 1.059463094352953
 local RUBBERBAND_LABEL = string.format("%s-rubberband", script_name)
 
-local current_pitch = 0
+local current_semitone = 0
 local active = false
 
 
-function set_halftone_pitch(pitch, activate)
+function set_semitone_pitch(rel_semitone, activate)
     if activate == nil then
         activate = true
     end
-    pitch = tonumber(pitch)
-    local pitch_scale = math.pow(HALFTONE_SCALE, pitch)
+    rel_semitone = tonumber(rel_semitone)
+    local pitch_scale = math.pow(2, rel_semitone/12)
 
     if active then
         mp.commandv('af-command', RUBBERBAND_LABEL, 'set-pitch', pitch_scale)
@@ -60,21 +60,21 @@ function set_halftone_pitch(pitch, activate)
         return
     end
 
-    current_pitch = pitch
+    current_semitone = rel_semitone
 
-    -- output new pitch
+    -- output new rel_semitone
     msg.debug(("new pitch-scale: %f"):format(pitch_scale))
-    mp.osd_message(("Pitch: %+d halftones"):format(pitch))
+    mp.osd_message(("Pitch: %+d semitones"):format(rel_semitone))
 end
 
 
 function increase_handler()
-    set_halftone_pitch(current_pitch + 1, false)
+    set_semitone_pitch(current_semitone + 1, false)
 end
 
 
 function decrease_handler()
-    set_halftone_pitch(current_pitch - 1, false)
+    set_semitone_pitch(current_semitone - 1, false)
 end
 
 
@@ -84,7 +84,7 @@ function toggle_handler()
         mp.osd_message(("'%s' deactivated"):format(script_name))
         active = false
     else
-        set_halftone_pitch(current_pitch, true)
+        set_semitone_pitch(current_semitone, true)
     end
 end
 
@@ -92,4 +92,4 @@ end
 mp.add_key_binding("Alt+p", 'increase', decrease_handler)
 mp.add_key_binding("Alt+P", 'decrease', increase_handler)
 mp.register_script_message('toggle', toggle_handler)
-mp.register_script_message('set_halftone_pitch', set_halftone_pitch)
+mp.register_script_message('set_semitone_pitch', set_semitone_pitch)

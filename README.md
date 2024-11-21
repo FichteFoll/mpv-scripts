@@ -25,7 +25,7 @@ and start the encode with <kbd>Alt+x</kbd>.
 
 ### [pitchcontrol.lua](./pitchcontrol.lua)
 
-Control audio pitch in half-tone steps.
+Control audio pitch in semitone steps.
 <kbd>Alt+P</kbd> increases,
-<kbd>Alt+p</kbd> decreases 
-by one half-tone each.
+<kbd>Alt+p</kbd> decreases
+by one semitone each.
