@@ -8,12 +8,12 @@ TODO
 
 ### [excerpt.lua](./excerpt.lua)
 
-Create excerpts from a video 
+Create excerpts from a video
 using mpv's encoding feature.
 
-Attempts to preserve settings 
+Attempts to preserve settings
 of the current mpv instance
-for encoding 
+for encoding
 (like selected edition,
 selected video/audio/subtitle track,
 audio or subtitle delay).
